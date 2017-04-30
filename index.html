@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+
+    <meta charset="utf-8">
+    <title>WebMidi.js Unit Tests</title>
+    <style>
+
+    </style>
+  </head>
+
+  <body>
+
+<script src="node_modules/webmidi/webmidi.min.js"></script>
+<script type="text/javascript">
+
+var input, output, ready,time,dt, start;
+ready = false;
+
+var notes = [["G#4","A4","A#4","B4"],["E4","F4","F#4","G4"],["C4","C#4","D4","D#4"],["G#3","A3","A#3","B3"]]
+
+function handleKey(e){
+    console.log(e);
+}
+
+function setLight(x,y,on){
+    var val = (on)? 1:0;
+    output.playNote(notes[y][x],1,{"rawVelocity": true, "velocity":val});
+}
+
+// 33 milliseconds = ~ 30 frames per sec
+
+function gameTick() {
+    setLight(Math.floor(Math.random()*4),Math.floor(Math.random()*4),true);
+
+
+}
+
+
+function onTimerTick() {
+    // Do stuff.
+    console.log("tick");
+    dt = Date.now() - time;
+    time = Date.now();
+}
+
+
+  // Enable WebMidi.js
+WebMidi.enable(function (err) {
+
+  if (err) {
+    console.log("WebMidi could not be enabled.", err);
+  }
+
+  // Viewing available inputs and outputs
+  console.log(WebMidi.inputs);
+  console.log(WebMidi.outputs);
+
+  // Retrieving an output port/device using its id, name or index
+  output = WebMidi.outputs[0];
+  // Retrieve an input by name, id or index
+  input = WebMidi.inputs[0];
+
+  setLight(0,0,true);
+  setLight(1,1,true);
+  setLight(2,2,true);
+  setLight(3,3,true);
+
+  //how to enable light
+  //output.playNote("B3",1,{"rawVelocity": true, "velocity":1});
+
+  //disable
+  //output.playNote("B3",1,{"rawVelocity": true, "velocity":0});
+
+
+
+  input.addListener('noteon', "all",handleKey );
+
+//   // Listen to pitch bend message on channel 3
+//   input.addListener('pitchbend', 3,
+//     function (e) {
+//       console.log("Received 'pitchbend' message.", e);
+//     }
+//   );
+
+//   // Listen to control change message on all channels
+//   input.addListener('controlchange', "all",
+//     function (e) {
+//       console.log("Received 'controlchange' message.", e);
+//     }
+//   );
+    time = start = Date.now();
+    setInterval(onTimerTick, 33);
+    setInterval(gameTick, 500);
+});
+
+</script>
+  </body>
+
+</html>
