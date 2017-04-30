@@ -5,7 +5,7 @@
   <head>
 
     <meta charset="utf-8">
-    <title>WebMidi.js Unit Tests</title>
+    <title>WebMidi.js test</title>
     <style>
 
     </style>
@@ -19,7 +19,11 @@
 var input, output, ready,time,dt, start;
 ready = false;
 
-var notes = [["G#4","A4","A#4","B4"],["E4","F4","F#4","G4"],["C4","C#4","D4","D#4"],["G#3","A3","A#3","B3"]]
+//lookup table for the notes on our mpd
+var notes = [["G#4","A4","A#4","B4"],
+            ["E4","F4","F#4","G4"],
+            ["C4","C#4","D4","D#4"],
+            ["G#3","A3","A#3","B3"]]
 
 function handleKey(e){
     console.log(e);
@@ -63,34 +67,11 @@ WebMidi.enable(function (err) {
   // Retrieve an input by name, id or index
   input = WebMidi.inputs[0];
 
-  setLight(0,0,true);
-  setLight(1,1,true);
-  setLight(2,2,true);
-  setLight(3,3,true);
-
-  //how to enable light
-  //output.playNote("B3",1,{"rawVelocity": true, "velocity":1});
-
-  //disable
-  //output.playNote("B3",1,{"rawVelocity": true, "velocity":0});
-
 
 
   input.addListener('noteon', "all",handleKey );
 
-//   // Listen to pitch bend message on channel 3
-//   input.addListener('pitchbend', 3,
-//     function (e) {
-//       console.log("Received 'pitchbend' message.", e);
-//     }
-//   );
-
-//   // Listen to control change message on all channels
-//   input.addListener('controlchange', "all",
-//     function (e) {
-//       console.log("Received 'controlchange' message.", e);
-//     }
-//   );
+    //state a simple game loop
     time = start = Date.now();
     setInterval(onTimerTick, 33);
     setInterval(gameTick, 500);
